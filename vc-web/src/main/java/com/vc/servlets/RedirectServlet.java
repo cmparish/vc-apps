@@ -53,22 +53,21 @@ public class RedirectServlet extends HttpServlet {
 
         
         //this gets the request body (blank for GET)
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder("");
         BufferedReader reader = request.getReader();
         String line;
         while ((line = reader.readLine()) != null) {
             buffer.append(line);
         }
+        //request body (from POST)
         String requestBody = buffer.toString();
-        //TODO - this may not be necessary, the body sould never be null;
-        if (requestBody == null ) {requestBody = ""; }
-           
+
         //generate the endpoint to the connect web service
         String vcRequestURI = VC_URI + pathInfo;
         if(queryString != null && queryString.length() > 0) {
             vcRequestURI += "?" + queryString;
         }
-        
+        //date that will be used in authentication process.
         Date date = new Date();
         URI uri = null;
         try {
@@ -82,9 +81,19 @@ public class RedirectServlet extends HttpServlet {
         //method to make all to API and return the response.
         String output = sendHTTPMessage(uri, requestType, publicKey, secretKey, requestBody, date);
         out.println(output);
-
     }
-    
+
+    /**
+     *
+     * @param uri - the URI for Vivial Connect
+     * @param requestMethodType - the HTTP Method type (GET, POST, PUT, DELETE, etc)
+     * @param publicKey - the public key from the user's connect account
+     * @param secretKey - the secret key from the user's connect account
+     * @param jsonData - the json data from the message body
+     * @param date - the date to be used for the authorization of the message request.
+     * @return - the response string in json format
+     * @throws IOException
+     */
     protected String sendHTTPMessage(URI uri, String requestMethodType, String publicKey, String secretKey, String jsonData, Date date) throws IOException{
         HttpURLConnection connection = null;
         VCAuthUtil util = new VCAuthUtil(publicKey, secretKey);
@@ -101,6 +110,7 @@ public class RedirectServlet extends HttpServlet {
                 String key = it.next().toString();
                 connection.setRequestProperty(key, authMap.get(key));
             }
+            //should update these values to contstants
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
 
@@ -108,7 +118,6 @@ public class RedirectServlet extends HttpServlet {
 
             if ("POST".equals(requestMethodType)) {
                 connection.setDoOutput(true);
-
                 //Send request
                 DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                 wr.writeBytes(jsonData);

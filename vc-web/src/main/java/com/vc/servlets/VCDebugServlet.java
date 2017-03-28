@@ -14,6 +14,9 @@ import java.util.Enumeration;
 
 /**
  * Created by cmparish on 3/27/17.
+ * this servlet is used for debugging. It simply writes to std out data from the GET,POST,PUT, DELETE request.  it
+ * prints out information like the header names/values, http request URI, method type, request body, etc.  Used to
+ * verify data coming into the servlet.
  */
 public class VCDebugServlet extends HttpServlet {
 
