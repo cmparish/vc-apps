@@ -51,15 +51,17 @@ public class RedirectServlet extends HttpServlet {
 
     protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // Actual logic goes here.
         PrintWriter out = response.getWriter();
-
+        
+        //Get info needed to make direct API call on the vc service
         String pathInfo = request.getPathInfo();
         String queryString = request.getQueryString();
         String requestType = request.getMethod();
         String publicKey = request.getHeader("publicKey");
         String secretKey = request.getHeader("secretKey");
 
+        
+        //this gets the request body (blank for GET)
         StringBuilder buffer = new StringBuilder();
         BufferedReader reader = request.getReader();
         String line;
@@ -67,18 +69,17 @@ public class RedirectServlet extends HttpServlet {
             buffer.append(line);
         }
         String requestBody = buffer.toString();
-
-
+        //TODO - this may not be necessary, the body sould never be null;
         if (requestBody == null ) {requestBody = ""; }
-
+           
+        //generate the endpoint to the connect web service
         String vcRequestURI = VC_URI + pathInfo;
         if(queryString != null && queryString.length() > 0) {
             vcRequestURI += "?" + queryString;
         }
-
+        
         Date date = new Date();
         URI uri = null;
-
         try {
             uri = new URI(vcRequestURI);
         } catch (URISyntaxException e) {
@@ -86,14 +87,14 @@ public class RedirectServlet extends HttpServlet {
         }
         // Set response content type
         response.setContentType("text/html");
+        
+        //method to make all to API and return the response.
         String output = sendHTTPMessage(uri, requestType, publicKey, secretKey, requestBody, date);
         out.println(output);
 
     }
     
     protected String sendHTTPMessage(URI uri, String requestMethodType, String publicKey, String secretKey, String jsonData, Date date) throws IOException{
-
-
         HttpURLConnection connection = null;
         VCAuthUtil util = new VCAuthUtil(publicKey, secretKey);
 
