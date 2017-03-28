@@ -10,10 +10,22 @@
     <servlet-class>com.vc.servlets.RedirectServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>VCDebugServlet</servlet-name>
+    <servlet-class>com.vc.servlets.VCDebugServlet</servlet-class>
+  </servlet>
+
+
   <servlet-mapping>
     <servlet-name>RedirectServlet</servlet-name>
     <url-pattern>/RedirectServlet</url-pattern>
   </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>VCDebugServlet</servlet-name>
+    <url-pattern>/debug/*</url-pattern>
+  </servlet-mapping>
+
 
   <servlet-mapping>
     <servlet-name>RedirectServlet</servlet-name>
