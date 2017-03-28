@@ -19,11 +19,8 @@ import javax.servlet.*;
 public class RedirectServlet extends HttpServlet {
 
     private static String VC_URI = "https://api.vivialconnect.net";
-    public void init() throws ServletException
-    {
-    }
-
-
+    public void init() throws ServletException {}
+    
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         process(request, response);
     }
@@ -35,22 +32,16 @@ public class RedirectServlet extends HttpServlet {
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         process(request, response);
     }
-
-
+    
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         process(request, response);
-
     }
 
-    public void destroy()
-    {
+    public void destroy(){
         // do nothing.
     }
-
-
+    
     protected void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         PrintWriter out = response.getWriter();
         
         //Get info needed to make direct API call on the vc service
@@ -133,8 +124,6 @@ public class RedirectServlet extends HttpServlet {
                 response.append('\n');
             }
             rd.close();
-
-
             return response.toString();
         } catch (IOException io) {
             io.printStackTrace();
@@ -144,7 +133,5 @@ public class RedirectServlet extends HttpServlet {
                 connection.disconnect();
             }
         }
-
     }
-    
 }
