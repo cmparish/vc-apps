@@ -15,6 +15,11 @@
     <servlet-class>com.vc.servlets.VCDebugServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>AuthGenerator</servlet-name>
+    <servlet-class>com.vc.servlets.AuthSignatureServlet</servlet-class>
+  </servlet>
+
 
   <servlet-mapping>
     <servlet-name>RedirectServlet</servlet-name>
@@ -32,5 +37,9 @@
     <url-pattern>/cmp1/*</url-pattern>
   </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>AuthGenerator</servlet-name>
+    <url-pattern>/auth/*</url-pattern>
+  </servlet-mapping>
 
 </web-app>
