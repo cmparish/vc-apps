@@ -1,5 +1,6 @@
 package com.vc;
 
+import com.vc.model.Message;
 import com.vc.util.VCAuthUtil;
 import com.vivialconnect.VivialConnectAuthUtil;
 import com.vivialconnect.VivialConnectMessageGETRequest;
@@ -23,5 +24,6 @@ public class Test {
     public static void main(String args[] ) {
         System.out.println("**** hello");
     }
+
 
 }
