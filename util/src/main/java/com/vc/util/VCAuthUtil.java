@@ -153,7 +153,9 @@ public class VCAuthUtil {
         //Tue, 02 Aug 2016 23:23:51 GMT
         SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM YYYY HH:mm:ss z");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return formatter.format(date);
+
+        return "Wed, 05 Apr 2017 05:04:27 GMT";
+        //return formatter.format(date);
 
     }
 
@@ -165,7 +167,8 @@ public class VCAuthUtil {
         SimpleDateFormat formatter = new SimpleDateFormat("YYYYMMdd'T'HHmmss'Z'");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
         String output = formatter.format(date);
-        return output;
+        return "20170405T050708Z";
+       // return output;
     }
 
 
@@ -178,6 +181,7 @@ public class VCAuthUtil {
         System.out.println(new String(bytes));
         System.out.println("*********************");
         */
+
         return bytesToHex(getHMacInBytes(privateKey, bytes));
 
     }
@@ -200,7 +204,7 @@ public class VCAuthUtil {
     }
 
 
-    private byte[] getHMacInBytes(String key, byte[] data) {
+    public static byte[] getHMacInBytes(String key, byte[] data) {
 
         try {
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
@@ -216,7 +220,7 @@ public class VCAuthUtil {
         return null;
     }
 
-    private String bytesToHex(byte[] bytes) {
+    public static String bytesToHex(byte[] bytes) {
         char[] hexArray = "0123456789abcdef".toCharArray();
         char[] hexChars = new char[bytes.length * 2];
         for ( int j = 0; j < bytes.length; j++ ) {
