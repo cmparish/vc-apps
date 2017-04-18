@@ -141,9 +141,26 @@ public class VivialConnectManager {
 
     }
 
-    private Date parseDate(String date) {
+    public static Date parseDate(String date) {
 
         SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM YYYY HH:mm:ss z");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        try {
+            Date dt = formatter.parse(date);
+
+
+            return dt;
+        } catch (Exception e) {
+
+        }
+        return null;
+
+    }
+
+    public static Date parseDateTS(String date) {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYYMMdd'T'HHmmss'Z'");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
