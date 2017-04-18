@@ -1,6 +1,10 @@
 package com.vc.util.testclient;
 
 
+import com.vc.model.Message;
+import com.vivialconnect.VivialConnectManager;
+import org.json.simple.parser.ParseException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +21,12 @@ public class VCMessageSender implements Runnable {
     private int totalMessages;
     private List<VCThreadedMessageResult> results = null;
 
-    private String[] randomBaseMsgs = {"sample1", "sample2", "sample3", "test1", "test2", "msg13", "msg1", "msg2", "msg3", "msg5"};
+    private String[] randomBaseMsgs;
     
+    private String publicKey = "";
+    private String secretKey = "";
+    private String accountId = "";
+
     public String info() {
         StringBuffer buffer = new StringBuffer();
 
@@ -29,7 +37,16 @@ public class VCMessageSender implements Runnable {
         return buffer.toString();
     }
 
-    public VCMessageSender(String fromNumber, List<String> toNumbers, long minMessageSleepTimeMs, int maxMessageSleepTimeMs, int totalMessages, List<VCThreadedMessageResult> results) {
+    public VCMessageSender(String fromNumber,
+                           List<String> toNumbers,
+                           long minMessageSleepTimeMs,
+                           int maxMessageSleepTimeMs,
+                           int totalMessages,
+                           List<VCThreadedMessageResult> results,
+                           String[] randomBaseMsgs,
+                           String publicKey,
+                           String secretKey,
+                           String accountId) {
         String[] toNumberArr = new String[toNumbers.size()];
 
         for (int i=0;i<toNumbers.size();i++) {
@@ -43,6 +60,10 @@ public class VCMessageSender implements Runnable {
         this.maxMessageSleepTimeMs = maxMessageSleepTimeMs;
         this.totalMessages = totalMessages;
         this.results = results;
+        this.publicKey = publicKey;
+        this.secretKey = secretKey;
+        this.accountId = accountId;
+        this.randomBaseMsgs = randomBaseMsgs;
     }
 
     /*
@@ -83,16 +104,25 @@ public class VCMessageSender implements Runnable {
     }
     private String generateRandomMessage(int msgCounter ) {
         int j = getRandomIndex(randomBaseMsgs.length);
-        //int j = msgCounter % randomBaseMsgs.length;
 
         StringBuffer buffer = new StringBuffer();
-        buffer.append("msg: ").append(msgCounter).append(" ").append(randomBaseMsgs[j]);
+        buffer.append("msg-").append(msgCounter).append("-").append(randomBaseMsgs[j]);
         return buffer.toString();
 
     }
 
 
     private String sendMessage(String toNumber, String fromNumber, String body) {
+        boolean debug = true;
+
+        if(debug) {
+            return sendMockMessage(toNumber, fromNumber, body);
+        }   else {
+            return sendRealMessage(toNumber, fromNumber, body);
+        }
+    }
+
+    private String sendMockMessage(String toNumber, String fromNumber, String body) {
         int min = 200;
         int max = 800;
 
@@ -105,6 +135,19 @@ public class VCMessageSender implements Runnable {
         }
         return "123";
     }
+
+    private String sendRealMessage(String toNumber, String fromNumber, String body) {
+        VivialConnectManager vivialConnectManager = new VivialConnectManager(secretKey, publicKey, accountId);
+        try {
+            Message message = vivialConnectManager.sendSMSMessage(body, toNumber, fromNumber);
+            return "" + message.getId();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return e.toString();
+        }
+    }
+
     public void run() {
         int msgCounter = 1;
 

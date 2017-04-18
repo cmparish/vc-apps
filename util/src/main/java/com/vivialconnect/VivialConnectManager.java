@@ -22,6 +22,7 @@ public class VivialConnectManager {
     VivialConnectAuthUtil util;
 
     public VivialConnectManager(String privateKey, String publicKey, String accountId) {
+
         this.accountId = accountId;
         util = new VivialConnectAuthUtil(privateKey, publicKey);
     }
@@ -29,12 +30,15 @@ public class VivialConnectManager {
     /** Methods for message POST **/
     public String messagePost(String message, String toNumber, String fromNumber) {
         VivialConnectMessagePOSTRequest request = new VivialConnectMessagePOSTRequest(accountId, toNumber, fromNumber, message);
+
         return sendHTTPMessage(request, util, new Date());
     }
 
 
     public Message sendSMSMessage(String message, String toNumber, String fromNumber) throws ParseException{
         String output = messagePost(message, toNumber, fromNumber);
+        
+
         return new Message(output);
         
     }
@@ -106,9 +110,9 @@ public class VivialConnectManager {
                 listSize = subList.size();
                 list.addAll(subList);
                 page++;
-                System.out.println("sublist size:" + subList.size());
-                System.out.print("list size: "+ list.size());
-                System.out.println("page: " + page);
+                //System.out.println("sublist size:" + subList.size());
+                //System.out.print("list size: "+ list.size());
+                //System.out.println("page: " + page);
             } catch (ParseException e) {
                 e.printStackTrace();
                 listSize = 0;
@@ -126,7 +130,6 @@ public class VivialConnectManager {
         HttpURLConnection connection = null;
 
         try {
-            System.out.println("CMP1");
             //Create connection
             URL url = new URL(request.getURIString());
             connection = (HttpURLConnection) url.openConnection();
@@ -135,7 +138,6 @@ public class VivialConnectManager {
 
             Iterator it = authMap.keySet().iterator();
             while (it.hasNext()) {
-                System.out.println("CMP2");
                 String key = it.next().toString();
                 connection.setRequestProperty(key, authMap.get(key));
             }
@@ -143,7 +145,6 @@ public class VivialConnectManager {
             //connection.setRequestProperty("X-Auth-SignedHeaders", value));
             //connection.setRequestProperty("Authorization", map.get(MessageProcessor.Authorization));
             //connection.setRequestProperty("Date", map.get(MessageProcessor.RDate));
-            System.out.println("CMP3");
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("Accept", "application/json");
 
@@ -157,7 +158,6 @@ public class VivialConnectManager {
                 wr.writeBytes(request.getJSONMessage());
                 wr.close();
             }
-            System.out.println("CMP4");
             //Get Response
             InputStream is = connection.getInputStream();
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));

@@ -158,9 +158,9 @@ public class VivialConnectAuthUtil {
 
     protected String getSignature(VivialConnectMessageRequest vivialConnectMessageRequest, Date date) {
         byte[] bytes = getCanonicalRequest(vivialConnectMessageRequest, date).getBytes();
-        System.out.println("*********************");
-        System.out.println(new String(bytes));
-        System.out.println("*********************");
+        //System.out.println("*********************");
+        //System.out.println(new String(bytes));
+        //System.out.println("*********************");
 
         return bytesToHex(getHMacInBytes(privateKey, bytes));
 

@@ -17,8 +17,8 @@ public class VivialConnectMessagePOSTRequest extends VivialConnectMessageRequest
         this.fromNumber = fromNumber;
         this.message = message;
 
-        mediaUrls = new String[1];
-        mediaUrls[0] = "https://www.vivialconnect.net/static/img/logo.png";
+        //mediaUrls = new String[1];
+        //mediaUrls[0] = "https://www.vivialconnect.net/static/img/logo.png";
     }
     @Override
     public String getRequestMessagePath() {
@@ -44,7 +44,7 @@ public class VivialConnectMessagePOSTRequest extends VivialConnectMessageRequest
         buff.append("").append("}").append(" ");
         buff.append("}");
 
-        System.out.println("message:" + buff.toString());
+        //System.out.println("message:" + buff.toString());
         return buff.toString();
 
     }

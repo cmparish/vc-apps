@@ -3,6 +3,8 @@ package com.vc.util.testclient;
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import sun.management.Sensor;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -22,15 +24,24 @@ public class VCThreadedClientManager {
     private long maxMessageSleepTimeMs;
     private int totalMessages;
 
-    private String[] randomBaseMsgs = {"sample1", "sample2", "sample3", "test1", "test2", "msg13", "msg1", "msg2", "msg3", "msg5"};
+    private String publicKey = "";
+    private String secretKey = "";
+    private String accountId = "";
+    private String fileName = "";
+    //private String[] randomBaseMsgs = {"sample1", "sample2", "sample3", "test1", "test2", "msg13", "msg1", "msg2", "msg3", "msg5"};
+    private String[] randomBaseMsgs;
 
-    public VCThreadedClientManager(List<String> fromNumbers, List<String> toNumbers, long minMessageSleepTimeMs, long maxMessageSleepTimeMs, int totalMessages) {
+    public VCThreadedClientManager(List<String> fromNumbers, List<String> toNumbers, long minMessageSleepTimeMs, long maxMessageSleepTimeMs, int totalMessages, String publicKey, String secretKey, String accountId, String[] randomBaseMsgs) {
         this.fromNumbers = fromNumbers;
         this.toNumbers = toNumbers;
         this.minMessageSleepTimeMs = minMessageSleepTimeMs;
         this.maxMessageSleepTimeMs = maxMessageSleepTimeMs;
         this.totalMessages = totalMessages;
         this.results = new ArrayList<VCThreadedMessageResult>();
+        this.publicKey = publicKey;
+        this.secretKey = secretKey;
+        this.accountId = accountId;
+        this.randomBaseMsgs = randomBaseMsgs;
     }
 
     public List<VCMessageSender> init() {
@@ -45,10 +56,10 @@ public class VCThreadedClientManager {
             List<String> iToNumbers = getToNumberList(fromNumber, toNumbers);
             VCMessageSender sender = null;
             if (i != (fromNumbers.size()-1)) {
-                sender = new VCMessageSender(fromNumber, iToNumbers, (int) minMessageSleepTimeMs, (int) maxMessageSleepTimeMs, messagesPerThread, results);
+                sender = new VCMessageSender(fromNumber, iToNumbers, (int) minMessageSleepTimeMs, (int) maxMessageSleepTimeMs, messagesPerThread, results, randomBaseMsgs, publicKey, secretKey, accountId);
                 msgCounter -= messagesPerThread;
             } else {
-                sender = new VCMessageSender(fromNumber, iToNumbers, (int) minMessageSleepTimeMs, (int) maxMessageSleepTimeMs, (msgCounter), results);
+                sender = new VCMessageSender(fromNumber, iToNumbers, (int) minMessageSleepTimeMs, (int) maxMessageSleepTimeMs, (msgCounter), results, randomBaseMsgs, publicKey, secretKey, accountId);
             }
             senderList.add(sender);
             System.out.println(sender.info());
@@ -80,6 +91,8 @@ public class VCThreadedClientManager {
         long duration = System.currentTimeMillis() - start;
 
         System.out.println("run time: " + duration);
+
+        print(System.out, results, ",");
     }
     private List<String> getToNumberList(String fromNumber, List<String> toNumbers){
         List<String> phoneNumbers = new ArrayList<String>();
@@ -118,17 +131,6 @@ public class VCThreadedClientManager {
         return "+1" + newNumber;
     }
 
-    public static void main(String args[] ) {
-        String[] fromNumbers = {"2223334444"};
-        String[] toNumbers = {"7778889999"};
-        long minMessageSleepMs = 1100;
-        long maxMessageSleepMs = 1300;
-        int totalMessages = 2;
-        VCThreadedClientManager manager = null;
-        manager = new VCThreadedClientManager(toList(fromNumbers), toList(toNumbers), minMessageSleepMs, maxMessageSleepMs, totalMessages);
-
-        manager.run(manager.init());
-    }
 
     public static List<String> toList(String[] strArr) {
         List<String> strList = new ArrayList<String>();
@@ -139,4 +141,51 @@ public class VCThreadedClientManager {
 
         return strList;
     }
+
+    public void print(PrintStream ps, List<VCThreadedMessageResult> list, String delimiter) {
+        if (list == null ) return;
+
+        for (int i=0; i<list.size(); i++) {
+            VCThreadedMessageResult record = list.get(i);
+            if (i == 0 ) {
+                ps.println(record.generateCSVRowHeader(delimiter));
+            }
+
+            ps.println(record.generateCSVRow(delimiter));
+        }
+        
+    }
+
+
+    public static void main(String args[] ) {
+        String[] fromNumbers =  {"+3334445555", "+6667778888"};
+        String[] toNumbers =    {"+3334445555", "+6667778888"};
+        String[] randomBaseMsgs = {"sample1", "sample2", "sample3", "test1", "test2", "msg13", "msg1", "msg2", "msg3", "msg5"};
+
+        String publicKey = "";
+        String secretKey = "";
+        String accountId = "";
+
+        long minMessageSleepMs = 1100;
+        long maxMessageSleepMs = 1300;
+        int totalMessages = 2;
+
+        String filePath = "~/";
+        String rootFileName = "testout1";
+        String fullPath = filePath + rootFileName + "-" + System.currentTimeMillis() + ".csv";
+
+        VCThreadedClientManager manager = null;
+        manager = new VCThreadedClientManager(  toList(fromNumbers),
+                                                toList(toNumbers),
+                                                minMessageSleepMs,
+                                                maxMessageSleepMs,
+                                                totalMessages,
+                                                publicKey,
+                                                secretKey,
+                                                accountId,
+                                                randomBaseMsgs);
+
+        manager.run(manager.init());
+    }
+
 }

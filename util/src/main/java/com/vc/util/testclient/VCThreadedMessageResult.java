@@ -44,4 +44,42 @@ public class VCThreadedMessageResult {
                 ", counterId=" + counterId +
                 '}';
     }
+
+    public String generateCSVRow(String delimiter) {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(startTime).append(delimiter);
+        buffer.append(endTime).append(delimiter);
+        buffer.append(duration).append(delimiter);
+        buffer.append(threadName).append(delimiter);
+        buffer.append(fromNumber).append(delimiter);
+        buffer.append(toNumber).append(delimiter);
+
+        buffer.append(sleepTime).append(delimiter);
+        buffer.append(messageBody).append(delimiter);
+        buffer.append(messageId).append(delimiter);
+        buffer.append(counterId).append(delimiter);
+
+
+        return  buffer.toString();
+
+    }
+
+    public String generateCSVRowHeader(String delimiter) {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("startTime").append(delimiter);
+        buffer.append("endTime").append(delimiter);
+        buffer.append("duration").append(delimiter);
+        buffer.append("threadName").append(delimiter);
+        buffer.append("fromNumber").append(delimiter);
+        buffer.append("toNumber").append(delimiter);
+
+        buffer.append("sleepTime").append(delimiter);
+        buffer.append("messageBody").append(delimiter);
+        buffer.append("messageId").append(delimiter);
+        buffer.append("counterId").append(delimiter);
+
+
+        return  buffer.toString();
+
+    }
 }
