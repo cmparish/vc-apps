@@ -1,6 +1,9 @@
 package com.vivialconnect;
 
+import com.vc.model.Message;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.io.*;
 
@@ -124,6 +127,12 @@ public class VivialConnectCmdLineApp {
         return manager.generateAttachmentsGET(251);
     }
 
+    public void getAll() {
+        VivialConnectManager manager = new VivialConnectManager(privateKey, apiKey , accountId);
+        List<Message> list = manager.getAllMessages();
+        
+    }
+
     public void runApp() {
         if (runMessagePOSTAUTH) {
             System.out.println("************************ POST AUTH TEST *******************");
@@ -149,6 +158,10 @@ public class VivialConnectCmdLineApp {
             System.out.println("************************ GET TEST *******************");
             System.out.println(runGetMessage());
             System.out.println("************************ GET TEST *******************");
+        }
+
+        if (true) {
+            getAll();
         }
     }
 }

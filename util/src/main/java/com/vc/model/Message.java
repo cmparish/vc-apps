@@ -1,10 +1,13 @@
 package com.vc.model;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by cmparish on 4/2/17.
@@ -24,7 +27,7 @@ public class Message {
     private long numMedia;
     private long numSegments;
     private String status= null;
-    private String errorCode= null;
+    private Long errorCode= null;
     private String errorMessage= null;
     private long price;
     private String priceCurrency= null;
@@ -56,12 +59,38 @@ public class Message {
         this.numMedia= (Long) messageObject.get("num_media");
         this.numSegments= (Long) messageObject.get("num_segments");
         this.status= (String) messageObject.get("status");
-        this.errorCode= (String) messageObject.get("error_code");
+        this.errorCode= (Long) messageObject.get("error_code");
         this.errorMessage= (String) messageObject.get("error_message");
         this.price = (Long) messageObject.get("price");
         this.priceCurrency= (String) messageObject.get("price_currency");
         this.messageStatusCallback= (String) messageObject.get("message_status_callback");
         this.smsConfigurationId= (String) messageObject.get("sms_configuration_id");
+
+    }
+
+
+    public static List<Message> loadMessageList(String jsonString) throws ParseException{
+        if (jsonString == null || "".equals(jsonString)) {
+            System.out.print("bad1");
+            return null;
+        }
+        List<Message> list = new ArrayList<Message>();
+
+        JSONParser parser = new JSONParser();
+
+        JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+        JSONArray messageArray = (JSONArray)jsonObject.get("messages");
+        if(messageArray == null) {
+            return null;
+        }
+
+        for (int i=0; i<messageArray.size(); i++) {
+            JSONObject messageObj = (JSONObject) messageArray.get(i);
+            Message message = new Message(messageObj.toJSONString());
+            list.add(message);
+        }
+
+        return list;
 
     }
 
@@ -122,7 +151,8 @@ public class Message {
         return status;
     }
 
-    public String getErrorCode() {
+    public long getErrorCode() {
+        if (errorCode == null) return 0;
         return errorCode;
     }
 

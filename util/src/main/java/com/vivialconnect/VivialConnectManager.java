@@ -1,5 +1,9 @@
 package com.vivialconnect;
 
+import com.sun.xml.internal.bind.marshaller.MinimumEscapeHandler;
+import com.vc.model.Message;
+import org.json.simple.parser.ParseException;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -7,10 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Created by cmparish on 1/9/17.
@@ -78,6 +79,38 @@ public class VivialConnectManager {
         VivialConnectMessageGETRequest request = new VivialConnectMessageGETRequest(accountId, page, limit, company);
         return sendHTTPMessage(request, util, new Date());
     }
+
+    public List<Message> getAllMessages() {
+        List <Message> list = new ArrayList<Message>();
+        int listSize = 0;
+        int page = 0;
+        int limit = 100;
+
+
+        do {
+            VivialConnectMessageGETRequest request = new VivialConnectMessageGETRequest(accountId, ""+page, ""+limit, null);
+            String resultStr = sendHTTPMessage(request, util, new Date());
+            try {
+                List <Message> subList = Message.loadMessageList(resultStr);
+                if (subList == null || subList.size() == 0) {
+                    listSize = 0;
+                }
+                listSize = subList.size();
+                list.addAll(subList);
+                page++;
+                System.out.println("sublist size:" + subList.size());
+                System.out.print("list size: "+ list.size());
+                System.out.println("page: " + page);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                listSize = 0;
+            }
+
+        } while (listSize > 0);
+
+        return list;
+    }
+
 
     protected String sendHTTPMessage(VivialConnectMessageRequest request, VivialConnectAuthUtil util, Date date) {
 
