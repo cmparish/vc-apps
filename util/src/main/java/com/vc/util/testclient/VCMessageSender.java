@@ -18,8 +18,7 @@ public class VCMessageSender implements Runnable {
     private List<VCThreadedMessageResult> results = null;
 
     private String[] randomBaseMsgs = {"sample1", "sample2", "sample3", "test1", "test2", "msg13", "msg1", "msg2", "msg3", "msg5"};
-
-
+    
     public String info() {
         StringBuffer buffer = new StringBuffer();
 
@@ -46,7 +45,7 @@ public class VCMessageSender implements Runnable {
         this.results = results;
     }
 
-
+    /*
     public VCMessageSender(String fromNumber, String[] toNumbers, long minMessageSleepTimeMs, int maxMessageSleepTimeMs, int totalMessages, List<VCThreadedMessageResult> results) {
         this.fromNumber = fromNumber;
 
@@ -56,7 +55,8 @@ public class VCMessageSender implements Runnable {
         this.totalMessages = totalMessages;
         this.results = results;
     }
-
+    */
+    
     private List<String> getToNumberList(String fromNumber, String[] toNumbers){
         List<String> phoneNumbers = new ArrayList<String>();
         String cFromNumber = cleanNumber(fromNumber);
@@ -162,28 +162,4 @@ public class VCMessageSender implements Runnable {
         //int range = length;
         return getRandomNumber(0, (length-1));
     }
-    public static void main(String args[] ){
-        String fromNumber = "6666666666";
-        String fromNumber2 = "7777777";
-
-        String[] toNumbes = {"2223334444", "+5556667777", "8889990000", "+3334445555"};
-        long messageSleepTimeMs = 1000;
-        //String baseSMSMessage = "bseMessage";
-        int totalMessages = 11;
-
-
-        VCMessageSender sender1 = new VCMessageSender(fromNumber, toNumbes, messageSleepTimeMs, (int)(messageSleepTimeMs+500), totalMessages, null);
-        Thread thread = new Thread(sender1);
-        thread.start();
-
-
-        VCMessageSender sender2 = new VCMessageSender(fromNumber2, toNumbes, messageSleepTimeMs, (int)(messageSleepTimeMs + 500), totalMessages, null);
-        Thread thread2 = new Thread(sender2);
-        thread2.start();
-
-
-
-
-    }
-
 }

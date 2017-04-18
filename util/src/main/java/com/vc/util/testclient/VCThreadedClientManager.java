@@ -119,11 +119,11 @@ public class VCThreadedClientManager {
     }
 
     public static void main(String args[] ) {
-        String[] fromNumbers = {"2223334444", "+5556667777", "8889990000", "+3334445555"};
-        String[] toNumbers = {"2223334444", "+5556667777", "8889990000", "+3334445555"};
+        String[] fromNumbers = {"2223334444"};
+        String[] toNumbers = {"7778889999"};
         long minMessageSleepMs = 1100;
         long maxMessageSleepMs = 1300;
-        int totalMessages = 511;
+        int totalMessages = 2;
         VCThreadedClientManager manager = null;
         manager = new VCThreadedClientManager(toList(fromNumbers), toList(toNumbers), minMessageSleepMs, maxMessageSleepMs, totalMessages);
 

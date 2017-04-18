@@ -32,6 +32,14 @@ public class VivialConnectManager {
         return sendHTTPMessage(request, util, new Date());
     }
 
+
+    public Message sendSMSMessage(String message, String toNumber, String fromNumber) throws ParseException{
+        String output = messagePost(message, toNumber, fromNumber);
+        return new Message(output);
+        
+    }
+
+
     public HashMap generateMessagePOSTAuth(String message, String toNumber, String fromNumber, String dateAsString) {
         Date date = parseDate(dateAsString);
         return generateMessagePOSTAuth(message, toNumber, fromNumber, date);
