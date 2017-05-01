@@ -38,8 +38,9 @@ if (secretKey != null && !"".equals(secretKey)) {
 %>
 <html>
 <body>
-
-
+This page allows you view the appropriate headers, content, and hmac data used to send a vivial connect sms message.
+<br>
+<br>
 <form action="messagePost.jsp">
   Public Key: <input type="text" name="apiKey" value="<%=apiKey %>"><br>
   Secret Key: <input type="text" name="secretKey" value="<%=secretKey %>" ><br>
@@ -52,8 +53,8 @@ if (secretKey != null && !"".equals(secretKey)) {
     <input type="submit" value="Submit">
 
 </form>
-<h1>Results</h1>
-<h2>Headers</h2>
+<hr>
+<h2>HTTP Headers</h2>
 <%
     for (Object o : headerHash.keySet()) {
         String key = o.toString();
@@ -74,7 +75,7 @@ if (secretKey != null && !"".equals(secretKey)) {
 <b>request-data</b>: <%=jsonMessage%> <br>
 <b>canonical String</b>: 
 <br>
-<textarea type="textarea" name="test" value="j" rows=10 cols=150 disabled=true><%=canonicalString%></textarea>
+<textarea type="textarea" name="test" rows=9 cols=150 disabled=true><%=canonicalString%></textarea>
 <br>
 <br>
 <b>Curl Command </b> the request is time based
