@@ -101,7 +101,7 @@ public class AuthSignatureServlet extends HttpServlet {
         VCAuthUtil util = new VCAuthUtil(publicKey, secretKey);
 
         //Create connection
-        HashMap<String, String> authMap = util.generateAuthorization(uri, requestMethodType, jsonData, date);
+        HashMap<String, String> authMap = util.generateAuthorizationDebug(uri, requestMethodType, jsonData, date);
 
         Iterator it = authMap.keySet().iterator();
         JSONObject obj = new JSONObject();

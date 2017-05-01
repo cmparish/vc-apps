@@ -1,6 +1,5 @@
 package com.vivialconnect;
 
-import com.sun.xml.internal.bind.marshaller.MinimumEscapeHandler;
 import com.vc.model.Message;
 import org.json.simple.parser.ParseException;
 
@@ -10,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;                 
 import java.util.*;
 
 /**
