@@ -200,7 +200,7 @@ public class VivialConnectManager {
 
     public static Date parseDateTS(String date) {
 
-        SimpleDateFormat formatter = new SimpleDateFormat("YYYYMMdd'T'HHmmss'Z'");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {

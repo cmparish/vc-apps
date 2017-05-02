@@ -148,7 +148,7 @@ public class VivialConnectAuthUtil {
 
     }
 
-    protected String getRequestTimestamp(Date date) {
+    public static String getRequestTimestamp(Date date) {
 
         SimpleDateFormat formatter = new SimpleDateFormat("YYYYMMdd'T'HHmmss'Z'");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT"));

@@ -7,7 +7,19 @@ String accountId = request.getParameter("accountId");
 String toNumber= request.getParameter("toNumber");
 String fromNumber = request.getParameter("fromNumber");
 String message= request.getParameter("message");
+Date date = new Date();
+String dateStr = request.getParameter("dateStr");
 
+if (dateStr != null && !"".equals(dateStr)) {
+    try {
+        Date d = VivialConnectManager.parseDateTS(dateStr);
+        date = d;
+    } catch (Exception e) {
+        dateStr = VivialConnectAuthUtil.getRequestTimestamp(date);
+    }
+} else {
+        dateStr = VivialConnectAuthUtil.getRequestTimestamp(date);
+}
 if (apiKey == null) apiKey = "";
 if (secretKey == null) secretKey= "";
 if (accountId== null) accountId= "";
@@ -29,7 +41,7 @@ jsonMessage = vcMessagePost.getJSONMessage();
 String canonicalString = ""; 
 
 if (secretKey != null && !"".equals(secretKey)) {
-    headerHash = util.generateAuthorizationDebug(vcMessagePost, new Date());
+    headerHash = util.generateAuthorizationDebug(vcMessagePost, date);
     headerHash.put("Content-Type", "application/json");
     headerHash.put("Accept", "application/json");
     canonicalString = (String) headerHash.get("DEBUG-CANONICAL_REQUEST");
@@ -41,7 +53,8 @@ if (secretKey != null && !"".equals(secretKey)) {
 This page allows you view the appropriate headers, content, and hmac data used to send a vivial connect sms message.
 <br>
 <br>
-<form action="messagePost.jsp">
+<form action="messagePost.jsp" method="post">
+  Date: <input type="text" name="dateStr" value="<%=dateStr%>"> format: YYYYMMdd'T'HHmmss'Z' <br> 
   Public Key: <input type="text" name="apiKey" value="<%=apiKey %>"><br>
   Secret Key: <input type="text" name="secretKey" value="<%=secretKey %>" ><br>
   Acccount Id: <input type="text" name="accountId" value="<%=accountId %>"><br>
